@@ -1,10 +1,9 @@
-﻿
-<canvas id=a>
+﻿<canvas id=a>
 <script>
 c=a.getContext`2d`
-C="92edbb79ab54000000000000000000000000400040"
+C="0080ffff0000000000000000000000000000000000"
 px=[];
-P="GRRx@B@x@RR@@P@@RR@@@@@@@@@@@@".replace(/./g,a=>{
+P="II@@@ARR@AB@@ARR@A@PAA@PIA@P@@RR".replace(/./g,a=>{
   z=a.charCodeAt()
   px.push(z&7)
   px.push((z>>3)&7)
@@ -14,9 +13,6 @@ for(j=0;j<S;j++){
   for(i=0;i<S;i++){
     if(px[j*S+i]){
       c.fillStyle="#"+C.substr(6*(px[j*S+i]-1),6);
-      
-      console.log(px[j*S+i]-1, C.substr(6*(px[j*S+i]-1),6));
-      
       c.fillRect(i,j,1,1);
     }
   }
