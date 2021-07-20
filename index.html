@@ -2,15 +2,15 @@
 Palette
 <br>
 <br>
-<input type=radio name=p id=p1 checked><input type=color id=c1> 
-<input type=radio name=p id=p2><input type=color id=c2> 
-<input type=radio name=p id=p3><input type=color id=c3> 
-<input type=radio name=p id=p4><input type=color id=c4>
+<input type=radio name=p id=p1 checked><input type=color id=c1 value="#000000"> 
+<input type=radio name=p id=p2><input type=color id=c2 value="#FF0000"> 
+<input type=radio name=p id=p3><input type=color id=c3 value="#00FF00"> 
+<input type=radio name=p id=p4><input type=color id=c4 value="#0000FF">
 <br>
 <br>
-<input type=radio name=p id=p5><input type=color id=c5> 
-<input type=radio name=p id=p6><input type=color id=c6> 
-<input type=radio name=p id=p7><input type=color id=c7> 
+<input type=radio name=p id=p5><input type=color id=c5 value="#FFFF00"> 
+<input type=radio name=p id=p6><input type=color id=c6 value="#00FFFF"> 
+<input type=radio name=p id=p7><input type=color id=c7 value="#FF00FF"> 
 <input type=radio name=p id=p8>transparent
 <br>
 <br>
@@ -32,7 +32,7 @@ Canvas size
 <button id=e>export</button>
 <br>
 <br>
-<textarea id=exp rows=20 cols=80></textarea>
+<textarea id=exp rows=10 cols=130></textarea>
 
 <script>
 c = a.getContext("2d");
@@ -122,12 +122,12 @@ a.onmouseup = function(e){
 
 trace = function(e){
   if(p1.checked) { colorindex = 1; currentcolor = c1.value; }
-  else if(p2.checked){ colorindex = 2; currentcolor = c2.value; }
-  else if(p3.checked){ colorindex = 3; currentcolor = c3.value; }
-  else if(p4.checked){ colorindex = 4; currentcolor = c4.value; }
-  else if(p5.checked){ colorindex = 5; currentcolor = c5.value; }
-  else if(p6.checked){ colorindex = 6; currentcolor = c6.value; }
-  else if(p7.checked){ colorindex = 7; currentcolor = c7.value; }
+  else if(p2.checked){ colorindex = 2; currentcolor = c2.value.replace(/#(.).(.).(.)./, "#$1$2$3"); }
+  else if(p3.checked){ colorindex = 3; currentcolor = c3.value.replace(/#(.).(.).(.)./, "#$1$2$3"); }
+  else if(p4.checked){ colorindex = 4; currentcolor = c4.value.replace(/#(.).(.).(.)./, "#$1$2$3"); }
+  else if(p5.checked){ colorindex = 5; currentcolor = c5.value.replace(/#(.).(.).(.)./, "#$1$2$3"); }
+  else if(p6.checked){ colorindex = 6; currentcolor = c6.value.replace(/#(.).(.).(.)./, "#$1$2$3"); }
+  else if(p7.checked){ colorindex = 7; currentcolor = c7.value.replace(/#(.).(.).(.)./, "#$1$2$3"); }
   else if(p8.checked){ colorindex = 0; currentcolor = "transparent" };
   
   x = e.pageX - a.offsetLeft;
@@ -146,13 +146,13 @@ trace = function(e){
 // export
 e.onclick = function(){
   colors = "";
-  colors += c1.value.replace("#",'');
-  colors += c2.value.replace("#",'');
-  colors += c3.value.replace("#",'');
-  colors += c4.value.replace("#",'');
-  colors += c5.value.replace("#",'');
-  colors += c6.value.replace("#",'');
-  colors += c7.value.replace("#",'');
+  colors += c1.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
+  colors += c2.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
+  colors += c3.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
+  colors += c4.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
+  colors += c5.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
+  colors += c6.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
+  colors += c7.value.replace("#",'').replace(/(.).(.).(.)./, "$1$2$3");
   
   px = [];
   pxascii = "";
@@ -171,23 +171,10 @@ e.onclick = function(){
   exp.value = 
 `<canvas id=a>
 <script>
-c=a.getContext\`2d\`
-C="${colors}"
-px=[];
-P="${pxascii}".replace(/./g,a=>{
-  z=a.charCodeAt()
-  px.push(z&7)
-  px.push((z>>3)&7)
-})
-S=${s.value}
-for(j=0;j<S;j++){
-  for(i=0;i<S;i++){
-    if(px[j*S+i]){
-      c.fillStyle="#"+C.substr(6*(px[j*S+i]-1),6);
-      c.fillRect(i,j,1,1);
-    }
-  }
-}
+c=a.getContext\`2d\` // ctx
+C="${colors}" // color palette (you can remove the colors you didn't use to save bytes)
+P=[];"${pxascii}".replace(/./g,a=>{z=a.charCodeAt(),P.push(z&7),P.push((z>>3)&7)}) // pixel decoding
+S=${s.value};for(j=0;j<S;j++)for(i=0;i<S;i++)if(P[j*S+i])c.fillStyle="#"+C.substr(3*(P[j*S+i]-1),3),c.fillRect(i,j,1,1) // drawing
 <\/script>`
 
 }
